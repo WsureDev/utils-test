@@ -13,31 +13,32 @@ public class NullableTest {
     public static void main(String[] args) {
         Map<String, Object> map = new HashMap<>();
         map.put("map", map);
+        map.put("map1", map);
+        map.put("map2", map);
+        map.put("map3", map);
+        map.put("map4", null);
 
-        Set<String> keySet = new NullableNode<Map,Map>(v-> (Map) v.get("map"))
-                .add(v-> (Map) v.get("map"))
-                .add(v-> (Map) v.get("map"))
-                .add(v-> (Map) v.get("map"))
-                .add(v-> (Map) v.get("map"))
-                .add(v-> v.keySet())
-                .build(map);
-        System.out.println(Arrays.toString(keySet.toArray()));
+        Function<Map,Map> getMap = m -> NullableUtils.get(m,v-> (Map) v.get("map"));
+        Function<Map,Set<String>> getKeys = m -> NullableUtils.get(m, Map::keySet);
+        Set<String> set2 = getMap.andThen(getMap)
+                .andThen(getMap)
+                .andThen(getMap)
+                .andThen(getMap)
+                .andThen(getKeys)
+                .apply(map);
+        System.out.println(Arrays.toString(set2.toArray()));
+
+        Set<String> set1 = NullableUtils.build(map)
+                .next(m -> (Map<String, Object>) m.get("map"))
+                .next(m -> (Map<String, Object>) m.get("map1"))
+                .next(m -> (Map<String, Object>) m.get("map2"))
+                .next(m -> (Map<String, Object>) m.get("map3"))
+                .next(m -> m.keySet())
+                .get();
+        System.out.println(Arrays.toString(set1.toArray()));
+
+//        NullableUtils.getOrThrow(map,m->m.get("HAHA"),new Exception("result is null"));
+        NullableUtils.getOrThrow(map,m->m.get("HAHA"),new RuntimeException("result is null"));
     }
 }
 
-class NullableNode<T,V> {
-    Function<? super T,? extends V> mapper;
-
-    public NullableNode(Function<? super T,? extends V> mapper){
-        this.mapper = mapper;
-    }
-
-    public <R> NullableNode<T,R> add(Function<? super V,? extends R> mapper){
-        return new NullableNode<>(this.mapper.andThen(mapper));
-    }
-
-    public V build(T t){
-        return this.mapper.apply(t);
-    }
-
-}
