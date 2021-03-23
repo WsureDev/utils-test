@@ -18,8 +18,8 @@ public class NullableTest {
         map.put("map3", map);
         map.put("map4", null);
 
-        Function<Map,Map> getMap = m -> NullableUtils.get(m,v-> (Map) v.get("map"));
-        Function<Map,Set<String>> getKeys = m -> NullableUtils.get(m, Map::keySet);
+        Function<Map, Map> getMap = m -> NullableUtils.get(m, v -> (Map) v.get("map"));
+        Function<Map, Set<String>> getKeys = m -> NullableUtils.get(m, Map::keySet);
         Set<String> set2 = getMap.andThen(getMap)
                 .andThen(getMap)
                 .andThen(getMap)
@@ -38,7 +38,7 @@ public class NullableTest {
         System.out.println(Arrays.toString(set1.toArray()));
 
 //        NullableUtils.getOrThrow(map,m->m.get("HAHA"),new Exception("result is null"));
-        NullableUtils.getOrThrow(map,m->m.get("HAHA"),new RuntimeException("result is null"));
+        NullableUtils.getOrThrow(map, m -> m.get("HAHA"), new RuntimeException("result is null"));
     }
 }
 
