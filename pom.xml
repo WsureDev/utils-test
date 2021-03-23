@@ -21,7 +21,7 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>top.wsure.common.utils</groupId>
+            <groupId>top.wsure</groupId>
             <artifactId>wsure-utils</artifactId>
             <version>1.0</version>
         </dependency>
