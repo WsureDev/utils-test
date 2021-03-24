@@ -23,7 +23,7 @@
         <dependency>
             <groupId>top.wsure</groupId>
             <artifactId>wsure-utils</artifactId>
-            <version>1.0</version>
+            <version>1.0.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
